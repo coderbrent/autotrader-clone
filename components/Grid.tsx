@@ -1,9 +1,8 @@
-import React from "react";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
-import ButtonBase from "@material-ui/core/ButtonBase";
+import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -13,10 +12,7 @@ const useStyles = makeStyles((theme: Theme) =>
     paper: {
       padding: theme.spacing(2),
       margin: "auto",
-      width: "auto"
-    },
-    image: {
-      width: "100%"
+      maxWidth: 500,
     },
     img: {
       width: "100%"
@@ -32,13 +28,11 @@ export default function GridComp(props: any) {
       <Paper className={classes.paper}>
         <Grid container spacing={2}>
           <Grid item>
-            <ButtonBase className={classes.image}>
-              <img
-                className={classes.img}
-                alt="complex"
-                src={props.photoUrl}
-              />
-            </ButtonBase>
+            <img
+              className={classes.img}
+              alt="vehicle"
+              src={props.photoUrl}
+            />
           </Grid>
           <Grid item xs={12} sm container>
             <Grid item xs container direction="column" spacing={2}>
@@ -58,12 +52,14 @@ export default function GridComp(props: any) {
               </Grid>
               <Grid item>
                 <Typography variant="body2" style={{ cursor: "pointer" }}>
+                <Button color={'secondary'} variant={'contained'} >
                   Make an Offer
+                </Button>
                 </Typography>
               </Grid>
             </Grid>
             <Grid item>
-              <Typography variant="subtitle1">${props.price}</Typography>
+            <Typography variant="subtitle1">${props.price}</Typography>
             </Grid>
           </Grid>
         </Grid>
