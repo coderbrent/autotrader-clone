@@ -1,6 +1,6 @@
 import { GetStaticProps } from "next";
 import openDB from "../openDB";
-import { FaqModel } from "./api/Faq";
+import { FaqModel } from "../api/Faq";
 import AccordionComp from "../components/Accordion";
 
 interface FaqProps {
@@ -10,7 +10,7 @@ interface FaqProps {
 export default function Faq({ faq }: FaqProps) {
   return (
     <div>
-      {faq.map(f => (
+      {faq.map((f) => (
         <AccordionComp id={f.id} question={f.question} answer={f.answer} />
       ))}
     </div>

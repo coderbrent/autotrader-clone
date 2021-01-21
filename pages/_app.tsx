@@ -8,13 +8,11 @@ import React from "react";
 import { SWRConfig } from "swr";
 import { Nav } from "../components/Nav";
 
-axios.defaults.baseURL = "http://localhost:3000";
-
 // Create a theme instance.
 export const theme = createMuiTheme({
   palette: {
     primary: {
-      main: "#556cd6",
+      main: "rgba(104,168,173,1)",
     },
     error: {
       main: red.A400,

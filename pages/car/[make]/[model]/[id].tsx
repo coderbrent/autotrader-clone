@@ -1,7 +1,7 @@
 import { GetServerSideProps } from "next";
 import openDB from "../../../../openDB";
-import CarModel from "../../../../pages/api/Car";
-import CompGrid from "../../../../components/Grid";
+import CarModel from '../../../../api/Car';
+import GridComp from "../../../../components/Grid";
 
 interface CarDetailsProps {
   car: CarModel | null | undefined;
@@ -12,7 +12,7 @@ export default function CarDetails({ car }: CarDetailsProps) {
     return <h1>Car not found!</h1>;
   }
   return (
-    <CompGrid key={car.id}
+    <GridComp key={car.id}
       make={car.make}
       model={car.model}
       details={car.details}
@@ -23,7 +23,6 @@ export default function CarDetails({ car }: CarDetailsProps) {
       fuelType={car.fuelType}
     />
   )
-    
 }
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
@@ -33,5 +32,5 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
     "SELECT * FROM Car where id = ?",
     id
   );
-  return { props: { car } };
+  return { props: { car: car || null } };
 };

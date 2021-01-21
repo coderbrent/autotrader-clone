@@ -39,7 +39,7 @@ export function Nav() {
         </Button>
 
         <Button color="inherit">
-          <Link href="/Faq">
+          <Link href="/faq">
             <a style={{ color: "white" }}>
               <Typography color="inherit">FAQs</Typography>
             </a>

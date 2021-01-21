@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiRequest, NextApiResponse } from 'next';
 import { getModels } from '../../database/getModels';
 import { getAsString } from '../../getAsString';
 
@@ -8,5 +8,6 @@ export default async function models(
 ) {
   const make = getAsString(req.query.make);
   const models = await getModels(make);
+  console.log(models)
   res.json(models);
 }
