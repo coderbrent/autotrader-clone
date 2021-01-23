@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const prices = [500, 1000, 5000, 15000, 25000, 900000];
 
-export default function Home({ makes, models }: HomeProps) {
+export default function Search({ makes, models }: HomeProps) {
   const classes = useStyles();
   const { query } = useRouter();
 
