@@ -1,5 +1,5 @@
 import { Grid, Typography, Box } from '@material-ui/core';
-import Search from './Index';
+import Search from './index';
 import Image from 'next/image';
 
 export default function CarsList() {
