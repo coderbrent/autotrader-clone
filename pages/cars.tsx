@@ -3,7 +3,6 @@ import { Grid } from "@material-ui/core";
 import { PaginationRenderItemParams } from "@material-ui/lab";
 import Pagination from "@material-ui/lab/Pagination";
 import PaginationItem from "@material-ui/lab/PaginationItem";
-import Search from "./index";
 import { getMakes, Make } from "../database/getMakes";
 import { getModels, Model } from "../database/getModels";
 import { getAsString } from "../getAsString";
@@ -12,6 +11,7 @@ import { getPaginatedCars } from "../database/getPaginatedCars";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
+import Search from './Index'
 
 export interface CarsListProps {
   makes: Make[];
