@@ -1,4 +1,6 @@
-import openDB from "../openDB";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 export interface Make {
   make: string;
@@ -6,9 +8,6 @@ export interface Make {
 }
 
 export async function getMakes() {
-  const db = await openDB();
-  const makes = await db.all(
-    "SELECT make, count(*) as count FROM car GROUP BY make"
-  );
+  const makes = await prisma.cars.findMany();
   return makes;
 }

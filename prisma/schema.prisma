@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:../cars.sqlite"
+}
+
+model migrations {
+  id   Int    @id @default(autoincrement())
+  name String
+  up   String
+  down String
+}
+
+model cars {
+  id         Int     @id @default(autoincrement())
+  make       String?
+  model      String?
+  year       Int?
+  fuelType   String?
+  kilometers Int?
+  details    String?
+  price      Int?
+  photoUrl   String?
+}
+
+model faq {
+  id       Int       @id @default(autoincrement())
+  question String?
+  answer   String?
+  created  DateTime?
+}

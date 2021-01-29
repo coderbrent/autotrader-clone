@@ -4,7 +4,7 @@ import { getAsString } from "../getAsString";
 import openDB from "../openDB";
 
 const mainQuery = `
-  FROM car
+  FROM cars
     WHERE (@make is NULL OR @make = make)
     AND (@model is NULL OR @make = make)
     AND (@minPrice is NULL OR @minPrice <= price)

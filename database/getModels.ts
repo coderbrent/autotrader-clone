@@ -1,18 +1,23 @@
-import openDB from "../openDB";
+import { PrismaClient } from '@prisma/client';
 
 export interface Model {
   model: string;
   count: number;
 }
 
+const prisma = new PrismaClient();
+
 export async function getModels(make: string) {
-  const db = await openDB();
-  const model = await db.all<Model[]>(
-    `SELECT model, count(*) as count 
-    FROM car 
-    WHERE make = ? 
-    GROUP BY model`
-  , make);
+  const model = await prisma.cars.findMany<Model[]>({
+    where: {
+      make: make
+    }
+  });
 
   return model;
 }
+
+`SELECT model, count(*) as count 
+    FROM cars 
+    WHERE make = ? 
+    GROUP BY model`
