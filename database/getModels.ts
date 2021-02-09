@@ -8,16 +8,12 @@ export interface Model {
 const prisma = new PrismaClient();
 
 export async function getModels(make: string) {
-  const model = await prisma.cars.findMany<Model[]>({
-    where: {
-      make: make
-    }
-  });
+
+  const model = await prisma.$queryRaw`
+    SELECT model, count(*) as count
+    FROM cars
+    WHERE make = ${make}
+    GROUP BY model`
 
   return model;
 }
-
-`SELECT model, count(*) as count 
-    FROM cars 
-    WHERE make = ? 
-    GROUP BY model`

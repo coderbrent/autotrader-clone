@@ -14,6 +14,7 @@ export default function Faq({ faq }: FaqProps) {
     <div>
       {faq.map((f) => (
         <AccordionComp 
+          key={f.id}
           id={f.id} 
           question={f.question} 
           answer={f.answer} 

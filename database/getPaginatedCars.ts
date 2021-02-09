@@ -1,47 +1,40 @@
 import { ParsedUrlQuery } from "querystring";
-import CarModel from "../api/Car";
 import { getAsString } from "../getAsString";
-import openDB from "../openDB";
+import { PrismaClient } from '@prisma/client';
+import CarModel from '../api/Car';
 
-const mainQuery = `
-  FROM cars
-    WHERE (@make is NULL OR @make = make)
-    AND (@model is NULL OR @make = make)
-    AND (@minPrice is NULL OR @minPrice <= price)
-    AND (@maxPrice is NULL OR @maxPrice >= price)
-`;
+const prisma = new PrismaClient();
 
 export async function getPaginatedCars(query: ParsedUrlQuery) {
-  const db = await openDB();
-
   const page = getValueNum(query.page) || 1;
   const rowsPerPage = getValueNum(query.rowsPerPage) || 4;
   const offset = (page - 1) * rowsPerPage;
 
   const dbParams = {
-    "@make": getValueStr(query.make),
-    "@model": getValueStr(query.model),
-    "@minPrice": getValueNum(query.minPrice),
-    "@maxPrice": getValueNum(query.maxPrice),
+    make: getValueStr(query.make),
+    model: getValueStr(query.model),
+    minPrice: getValueNum(query.minPrice),
+    maxPrice: getValueNum(query.maxPrice),
   };
 
-  const carsPromise = db.all<CarModel[]>(
-    `SELECT * ${mainQuery} LIMIT @rowsPerPage OFFSET @offset`,
-    {
-      ...dbParams,
-      "@rowsPerPage": rowsPerPage,
-      "@offset": offset,
-    }
-  );
+  const carsPromise = await prisma.$queryRaw<CarModel[]>
+    `SELECT * FROM cars
+    WHERE (${dbParams.make} is NULL OR ${dbParams.make} = make)
+    AND (${dbParams.model} is NULL OR ${dbParams.make} = make)
+    AND (${dbParams.minPrice} is NULL OR ${dbParams.minPrice} <= price)
+    AND (${dbParams.maxPrice} is NULL OR ${dbParams.maxPrice} >= price)
+    LIMIT ${rowsPerPage} OFFSET ${offset}`;
 
-  const totalRowsPromise = db.get<{ count: number }>(
-    `SELECT COUNT(*) as count ${mainQuery}`,
-    dbParams
-  );
+  const totalRowsPromise = prisma.$queryRaw
+    `SELECT COUNT(*) as total FROM cars
+    WHERE (${dbParams.make} is NULL OR ${dbParams.make} = make)
+    AND (${dbParams.model} is NULL OR ${dbParams.make} = make)
+    AND (${dbParams.minPrice} is NULL OR ${dbParams.minPrice} <= price)
+    AND (${dbParams.maxPrice} is NULL OR ${dbParams.maxPrice} >= price)
+    LIMIT ${rowsPerPage} OFFSET ${offset}`
 
   const [cars, totalRows] = await Promise.all([carsPromise, totalRowsPromise]);
-
-  return { cars, totalPages: Math.ceil(totalRows.count / rowsPerPage) };
+  return { cars, totalPages: Math.ceil(totalRows[0].total / rowsPerPage)};
 }
 
 function getValueNum(value: string | string[]) {

@@ -1,19 +1,18 @@
 CREATE TABLE faq (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  id INTEGER PRIMARY KEY IDENTITY,
   question TEXT,
-  answer TEXT,
-  created DATE
+  answer TEXT
 );
 
-INSERT INTO faq (question, answer, created) values('Is it safe to buy a car online?', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempo', DATE('2019-11-01'));
-INSERT INTO faq (question, answer, created) values('Does my new car come with any guarantee?', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempo', DATE('2020-11-01'));
-INSERT INTO faq (question, answer, created) values('What is the best month to buy a car?', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempo', DATE('2018-11-01'));
-INSERT INTO faq (question, answer, created) values('How to know the car history?', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempo', DATE('2018-11-01'));
-INSERT INTO faq (question, answer, created) values('How much do I pay a month to use the service?', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempo', DATE('2018-11-01'));
+INSERT INTO faq (question, answer) values('Is it safe to buy a car online?', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempo');
+INSERT INTO faq (question, answer) values('Does my new car come with any guarantee?', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempo');
+INSERT INTO faq (question, answer) values('What is the best month to buy a car?', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempo');
+INSERT INTO faq (question, answer) values('How to know the car history?', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempo');
+INSERT INTO faq (question, answer) values('How much do I pay a month to use the service?', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempo');
 
 -- CAR
 CREATE TABLE cars (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id INTEGER PRIMARY KEY IDENTITY,
     make TEXT,
     model TEXT,
     year INTEGER,

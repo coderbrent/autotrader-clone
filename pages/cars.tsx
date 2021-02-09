@@ -1,6 +1,5 @@
 import { GetServerSideProps } from "next";
 import { Grid } from "@material-ui/core";
-import { PaginationRenderItemParams } from "@material-ui/lab";
 import Pagination from "@material-ui/lab/Pagination";
 import PaginationItem from "@material-ui/lab/PaginationItem";
 import { getMakes, Make } from "../database/getMakes";
@@ -8,10 +7,9 @@ import { getModels, Model } from "../database/getModels";
 import { getAsString } from "../getAsString";
 import CarModel from "../api/Car";
 import { getPaginatedCars } from "../database/getPaginatedCars";
-import Link from "next/link";
 import { useRouter } from "next/router";
-import { ParsedUrlQuery } from "querystring";
-import Search from './Index'
+import Search from './Index';
+import { MaterialUiLink } from "../components/MaterialUiLink";
 
 export interface CarsListProps {
   makes: Make[];
@@ -27,6 +25,7 @@ export default function CarsList({
   totalPages,
 }: CarsListProps) {
   const { query } = useRouter();
+  console.log(totalPages)
   return (
     <Grid container spacing={3}>
       <Grid item xs={12} sm={5} md={3} lg={2}>
@@ -50,24 +49,6 @@ export default function CarsList({
         </pre>
       </Grid>
     </Grid>
-  );
-}
-
-export interface MaterialUiLinkProps {
-  item: PaginationRenderItemParams;
-  query: ParsedUrlQuery;
-}
-
-export function MaterialUiLink({ item, query, ...props }: MaterialUiLinkProps) {
-  return (
-    <Link
-      href={{
-        pathname: "/cars",
-        query: { ...query, page: item.page },
-      }}
-    >
-      <a {...props}></a>
-    </Link>
   );
 }
 

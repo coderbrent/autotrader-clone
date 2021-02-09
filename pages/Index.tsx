@@ -112,8 +112,8 @@ export default function Search({ makes, models, singleColumn }: HomeProps) {
                     <MenuItem value='all'>
                       <em>No Min</em>
                     </MenuItem>
-                    {prices.map((price) => (
-                      <MenuItem key={price} value={price}>
+                    {prices.map((price, i) => (
+                      <MenuItem key={i} value={price}>
                         {price}
                       </MenuItem>
                     ))}

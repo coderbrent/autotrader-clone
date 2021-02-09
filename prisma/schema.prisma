@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["groupBy"]
 }
 
 datasource db {
@@ -27,8 +28,7 @@ model cars {
 }
 
 model faq {
-  id       Int       @id @default(autoincrement())
+  id       Int     @id @default(autoincrement())
   question String?
   answer   String?
-  created  DateTime?
 }
