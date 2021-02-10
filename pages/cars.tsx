@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { GetServerSideProps } from "next";
 import { Grid } from "@material-ui/core";
 import Pagination from "@material-ui/lab/Pagination";
@@ -9,7 +10,10 @@ import CarModel from "../api/Car";
 import { getPaginatedCars } from "../database/getPaginatedCars";
 import { useRouter } from "next/router";
 import Search from './Index';
+import { ParsedUrlQuery, stringify } from 'querystring';
 import { MaterialUiLink } from "../components/MaterialUiLink";
+import useSWR from "swr";
+import deepEqual from 'fast-deep-equal';
 
 export interface CarsListProps {
   makes: Make[];
@@ -24,8 +28,14 @@ export default function CarsList({
   cars,
   totalPages,
 }: CarsListProps) {
+  
   const { query } = useRouter();
-  console.log(totalPages)
+  const [serverQuery] = useState(query);
+  const { data } = useSWR('/api/cars?' + stringify(query), {
+    dedupingInterval: 15000,
+    initialData: deepEqual(query, serverQuery)
+  });
+    
   return (
     <Grid container spacing={3}>
       <Grid item xs={12} sm={5} md={3} lg={2}>
@@ -45,14 +55,14 @@ export default function CarsList({
               />
             )}
           />
-          {JSON.stringify({ totalPages, cars }, null, 4)}
+          {JSON.stringify(data, null, 4)}
         </pre>
       </Grid>
     </Grid>
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
+export const getServerSideProps: GetServerSideProps<CarsListProps> = async (ctx) => {
   const make = getAsString(ctx.query.make);
   const [makes, models, pagination] = await Promise.all([
     getMakes(),

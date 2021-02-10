@@ -33,7 +33,7 @@ export async function getPaginatedCars(query: ParsedUrlQuery) {
     AND (${dbParams.maxPrice} is NULL OR ${dbParams.maxPrice} >= price)
     LIMIT ${rowsPerPage} OFFSET ${offset}`
 
-  const [cars, totalRows] = await Promise.all([carsPromise, totalRowsPromise]);
+  const [cars, totalRows] = await Promise.all([carsPromise, totalRowsPromise]).finally(async () => await prisma.$disconnect());
   return { cars, totalPages: Math.ceil(totalRows[0].total / rowsPerPage)};
 }
 
