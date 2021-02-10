@@ -1,7 +1,7 @@
 import { GetServerSideProps } from "next";
-import openDB from "../../../../openDB";
 import CarModel from '../../../../api/Car';
 import GridComp from "../../../../components/Grid";
+import { PrismaClient } from '@prisma/client';
 
 interface CarDetailsProps {
   car: CarModel | null | undefined;
@@ -26,11 +26,11 @@ export default function CarDetails({ car }: CarDetailsProps) {
 }
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
+  const prisma = new PrismaClient();
   const id = ctx.params.id;
-  const db = await openDB();
-  const car = await db.get<CarModel | undefined>(
-    "SELECT * FROM Car where id = ?",
-    id
-  );
+
+  const car = await prisma.$queryRaw<CarModel | undefined>`
+    "SELECT * FROM Car where id = ${id}",
+  `
   return { props: { car: car || null } };
 };
