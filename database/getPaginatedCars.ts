@@ -1,39 +1,63 @@
 import { ParsedUrlQuery } from "querystring";
-import { getAsString } from "../getAsString";
-import { PrismaClient } from '@prisma/client';
+import { getAsString } from "../utils/getAsString";
 import CarModel from '../api/Car';
-
-const prisma = new PrismaClient();
+import { db } from '../db';
 
 export async function getPaginatedCars(query: ParsedUrlQuery) {
   const page = getValueNum(query.page) || 1;
   const rowsPerPage = getValueNum(query.rowsPerPage) || 4;
   const offset = (page - 1) * rowsPerPage;
 
-  const dbParams = {
+  const dbParams = { //we parse the url query for strings to use
     make: getValueStr(query.make),
     model: getValueStr(query.model),
     minPrice: getValueNum(query.minPrice),
     maxPrice: getValueNum(query.maxPrice),
   };
 
-  const carsPromise = await prisma.$queryRaw<CarModel[]>
-    `SELECT * FROM cars
-    WHERE (${dbParams.make} is NULL OR ${dbParams.make} = make)
-    AND (${dbParams.model} is NULL OR ${dbParams.make} = make)
-    AND (${dbParams.minPrice} is NULL OR ${dbParams.minPrice} <= price)
-    AND (${dbParams.maxPrice} is NULL OR ${dbParams.maxPrice} >= price)
-    LIMIT ${rowsPerPage} OFFSET ${offset}`;
+  const carsPromise = await db.query<CarModel[]>
+    (`SELECT * FROM cars
+    WHERE (? is NULL OR ? = make)
+    AND (? is NULL OR ? = make)
+    AND (? is NULL OR ? <= price)
+    AND (? is NULL OR ? >= price)
+    LIMIT ? OFFSET ?`, 
+    [
+      dbParams.make, 
+      dbParams.make,
+      dbParams.model,
+      dbParams.make,
+      dbParams.minPrice,
+      dbParams.minPrice,
+      dbParams.maxPrice,
+      dbParams.maxPrice,
+      rowsPerPage,
+      offset
+    ]);
 
-  const totalRowsPromise = prisma.$queryRaw
+  const totalRowsPromise = db.query(
     `SELECT COUNT(*) as total FROM cars
-    WHERE (${dbParams.make} is NULL OR ${dbParams.make} = make)
-    AND (${dbParams.model} is NULL OR ${dbParams.make} = make)
-    AND (${dbParams.minPrice} is NULL OR ${dbParams.minPrice} <= price)
-    AND (${dbParams.maxPrice} is NULL OR ${dbParams.maxPrice} >= price)
-    LIMIT ${rowsPerPage} OFFSET ${offset}`
+    WHERE (? is NULL OR ? = make)
+    AND (? is NULL OR ? = make)
+    AND (? is NULL OR ? <= price)
+    AND (? is NULL OR ? >= price)
+    LIMIT ? OFFSET ?`, 
+    [
+      dbParams.make, 
+      dbParams.make,
+      dbParams.model,
+      dbParams.make,
+      dbParams.minPrice,
+      dbParams.minPrice,
+      dbParams.maxPrice,
+      dbParams.maxPrice,
+      rowsPerPage,
+      offset
+    ]);
 
-  const [cars, totalRows] = await Promise.all([carsPromise, totalRowsPromise]).finally(async () => await prisma.$disconnect());
+  const [cars, totalRows] = 
+    await Promise.all([carsPromise, totalRowsPromise]);
+
   return { cars, totalPages: Math.ceil(totalRows[0].total / rowsPerPage)};
 }
 

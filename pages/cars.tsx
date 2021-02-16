@@ -1,19 +1,18 @@
 import { useState } from 'react';
 import { GetServerSideProps } from "next";
 import { Grid } from "@material-ui/core";
-import Pagination from "@material-ui/lab/Pagination";
-import PaginationItem from "@material-ui/lab/PaginationItem";
 import { getMakes, Make } from "../database/getMakes";
 import { getModels, Model } from "../database/getModels";
-import { getAsString } from "../getAsString";
+import { getAsString } from "../utils/getAsString";
 import CarModel from "../api/Car";
 import { getPaginatedCars } from "../database/getPaginatedCars";
 import { useRouter } from "next/router";
 import Search from './Index';
-import { ParsedUrlQuery, stringify } from 'querystring';
-import { MaterialUiLink } from "../components/MaterialUiLink";
+import { stringify } from 'querystring';
 import useSWR from "swr";
 import deepEqual from 'fast-deep-equal';
+import { CarPagination } from '../components/CarPagination';
+import { CarCard } from '../components/CarCard';
 
 export interface CarsListProps {
   makes: Make[];
@@ -28,35 +27,39 @@ export default function CarsList({
   cars,
   totalPages,
 }: CarsListProps) {
-  
   const { query } = useRouter();
   const [serverQuery] = useState(query);
+
   const { data } = useSWR('/api/cars?' + stringify(query), {
-    dedupingInterval: 15000,
+    dedupingInterval: 10000,
     initialData: deepEqual(query, serverQuery)
   });
-    
+
+  console.log(cars)
+
   return (
     <Grid container spacing={3}>
       <Grid item xs={12} sm={5} md={3} lg={2}>
         <Search singleColumn makes={makes} models={models} />
       </Grid>
       <Grid item xs={12} sm={7} md={9} lg={10}>
-        <pre style={{ fontSize: "3rem" }}>
-          <Pagination
-            page={parseInt(getAsString(query.page) || "1")}
-            count={totalPages}
-            renderItem={(item) => (
-              <PaginationItem
-                component={MaterialUiLink}
-                query={query}
-                item={item}
-                {...item}
-              />
-            )}
-          />
-          {JSON.stringify(data, null, 4)}
-        </pre>
+      <CarPagination totalPages={totalPages} />
+        <div style={{
+          display: 'flex',
+          flexFlow: 'row wrap',
+          justifyContent: 'center',
+          gap: '1rem'
+        }}>
+         
+          {cars.map((car) => (
+            <CarCard
+              key={car.id}
+              car={car}
+            />
+          ))}
+        </div>
+        <CarPagination totalPages={totalPages} />
+        
       </Grid>
     </Grid>
   );

@@ -1,6 +1,4 @@
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { query } from '../db';
 
 export interface Make {
   make: string;
@@ -8,10 +6,11 @@ export interface Make {
 }
 
 export async function getMakes() {
-  const makes = await prisma.$queryRaw`
+  const makes = await query(`
     SELECT make, COUNT(*) as count
     FROM cars
     GROUP BY make
-  `;
+  `);
+
   return makes;
 }

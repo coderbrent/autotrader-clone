@@ -14,7 +14,7 @@ import {
 import { ModelSelect } from "../components/ModelSelect";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import router, { useRouter } from "next/router";
-import { getAsString } from "../getAsString";
+import { getAsString } from "../utils/getAsString";
 import { useState } from "react";
 
 export interface HomeProps {
