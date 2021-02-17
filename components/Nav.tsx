@@ -27,7 +27,7 @@ export function Nav() {
     <AppBar position="static">
       <Toolbar variant="dense">
         <Typography variant="h6" className={classes.title}>
-          AutoTrader Clone
+          Exotic Car Buyer
         </Typography>
 
         <Button color="inherit">

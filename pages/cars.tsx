@@ -32,7 +32,9 @@ export default function CarsList({
 
   const { data } = useSWR('/api/cars?' + stringify(query), {
     dedupingInterval: 10000,
-    initialData: deepEqual(query, serverQuery)
+    initialData: deepEqual(query, serverQuery) 
+      ? { cars, totalPages }
+      : undefined,
   });
 
   return (
@@ -41,14 +43,24 @@ export default function CarsList({
         <Search singleColumn makes={makes} models={models} />
       </Grid>
       <Grid item xs={12} sm={7} md={9} lg={10}>
-      <CarPagination totalPages={totalPages} />
-          {cars.map((car) => (
+        <CarPagination totalPages={data?.totalPages} />
+        <Grid 
+          container
+          spacing={3} 
+          direction="row" 
+          justify="center" 
+          alignContent="center"
+        >
+        {data?.cars.map((car) => (
+          <Grid key={car.id} item>
             <CarCard
               key={car.id}
               car={car}
             />
-          ))}
-        <CarPagination totalPages={totalPages} />
+          </Grid>
+        ))}
+        </Grid>
+        <CarPagination totalPages={data?.totalPages} />
       </Grid>
     </Grid>
   );
