@@ -1,7 +1,6 @@
 import { ParsedUrlQuery } from "querystring";
 import { getAsString } from "../utils/getAsString";
-import CarModel from '../api/Car';
-import { db } from '../db';
+import { dbQuery } from '../db';
 
 export async function getPaginatedCars(query: ParsedUrlQuery) {
   const page = getValueNum(query.page) || 1;
@@ -15,7 +14,7 @@ export async function getPaginatedCars(query: ParsedUrlQuery) {
     maxPrice: getValueNum(query.maxPrice),
   };
 
-  const carsPromise = await db.query<CarModel[]>
+  const carsPromise = await dbQuery
     (`SELECT * FROM cars
     WHERE (? is NULL OR ? = make)
     AND (? is NULL OR ? = make)
@@ -35,7 +34,7 @@ export async function getPaginatedCars(query: ParsedUrlQuery) {
       offset
     ]);
 
-  const totalRowsPromise = db.query(
+  const totalRowsPromise = dbQuery(
     `SELECT COUNT(*) as total FROM cars
     WHERE (? is NULL OR ? = make)
     AND (? is NULL OR ? = make)

@@ -35,8 +35,6 @@ export default function CarsList({
     initialData: deepEqual(query, serverQuery)
   });
 
-  console.log(cars)
-
   return (
     <Grid container spacing={3}>
       <Grid item xs={12} sm={5} md={3} lg={2}>
@@ -44,22 +42,13 @@ export default function CarsList({
       </Grid>
       <Grid item xs={12} sm={7} md={9} lg={10}>
       <CarPagination totalPages={totalPages} />
-        <div style={{
-          display: 'flex',
-          flexFlow: 'row wrap',
-          justifyContent: 'center',
-          gap: '1rem'
-        }}>
-         
           {cars.map((car) => (
             <CarCard
               key={car.id}
               car={car}
             />
           ))}
-        </div>
         <CarPagination totalPages={totalPages} />
-        
       </Grid>
     </Grid>
   );
@@ -77,7 +66,7 @@ export const getServerSideProps: GetServerSideProps<CarsListProps> = async (ctx)
     props: {
       makes,
       models,
-      cars: pagination.cars,
+      cars: JSON.parse(JSON.stringify(pagination.cars)),
       totalPages: pagination.totalPages,
     },
   };

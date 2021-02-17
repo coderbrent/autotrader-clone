@@ -1,13 +1,11 @@
 import { GetStaticProps } from "next";
 import { FaqModel } from "../api/Faq";
-import { PrismaClient } from "@prisma/client";
 import AccordionComp from "../components/Accordion";
+import { dbQuery } from "../db";
 
 interface FaqProps {
   faq: FaqModel[];
 }
-
-const prisma = new PrismaClient();
 
 export default function Faq({ faq }: FaqProps) {
   return (
@@ -25,6 +23,6 @@ export default function Faq({ faq }: FaqProps) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const faq = await prisma.faq.findMany();
-  return { props: { faq: faq } };
+  const faq = await dbQuery(`SELECT * FROM faq`)
+  return { props: { faq: JSON.parse(JSON.stringify(faq)) } };
 };

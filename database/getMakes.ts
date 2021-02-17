@@ -1,4 +1,4 @@
-import { query } from '../db';
+import { dbQuery } from '../db';
 
 export interface Make {
   make: string;
@@ -6,11 +6,17 @@ export interface Make {
 }
 
 export async function getMakes() {
-  const makes = await query(`
+  const makes = await dbQuery(`
     SELECT make, COUNT(*) as count
     FROM cars
     GROUP BY make
   `);
 
-  return makes;
+  let obj = JSON.parse(JSON.stringify(makes))
+
+  let pojo = {
+    obj
+  }
+
+  return <Make[]>pojo.obj;
 }

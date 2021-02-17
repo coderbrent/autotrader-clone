@@ -6,5 +6,6 @@ export default async function cars(
   res: NextApiResponse
 ) {
   const cars = await getPaginatedCars(req.query);
+  
   res.json(cars);
 }

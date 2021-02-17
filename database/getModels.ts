@@ -1,4 +1,4 @@
-import { query } from '../db';
+import { dbQuery } from '../db';
 
 export interface Model {
   model: string;
@@ -6,11 +6,11 @@ export interface Model {
 }
 
 export async function getModels(make: string) {
-  const model = await query<Model[]>(`
+  const model = await dbQuery(`
     SELECT model, count(*) as count
     FROM cars
     WHERE make = ?
     GROUP BY model`, [make]);
 
-  return model;
+  return <Model[]>model;
 }
