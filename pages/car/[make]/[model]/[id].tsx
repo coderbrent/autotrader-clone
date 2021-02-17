@@ -28,7 +28,7 @@ export default function CarDetails({ car }: CarDetailsProps) {
 export const getServerSideProps: GetServerSideProps = async ctx => {
   const id = ctx.params.id;
 
-  const car = await dbQuery<CarModel | undefined>(`
+  const car = await dbQuery(`
     "SELECT * FROM Car where id = ?",
   `, id)
   return { props: { car: car || null } };
