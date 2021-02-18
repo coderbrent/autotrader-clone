@@ -8,10 +8,10 @@ const mysql = require('serverless-mysql')
 
 const db = mysql({
   config: {
-    host: 'z3iruaadbwo0iyfp.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
-    database: 'o7qvmf7yelzgeopq',
-    user: 'lchcf3hkpi23ro2e',
-    password: 'olgj388pnmfog3li',
+    host: process.env.MYSQL_HOST,
+    database: process.env.MYSQL_DATABASE,
+    user: process.env.MYSQL_USERNAME,
+    password: process.env.MYSQL_PASSWORD,
   },
 });
 
