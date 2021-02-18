@@ -26,12 +26,12 @@ export function Nav() {
   return (
     <AppBar position="static">
       <Toolbar variant="dense">
-        <Typography variant="h6" className={classes.title}>
+        <Typography color={'textSecondary'} variant="h6" className={classes.title}>
           Exotic Car Buyer
         </Typography>
 
         <Button color="inherit">
-          <Link href="/">
+          <Link href="/cars">
             <a style={{ color: "white" }}>
               <Typography color="inherit">Home</Typography>
             </a>

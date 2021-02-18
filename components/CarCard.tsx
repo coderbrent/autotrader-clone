@@ -41,7 +41,7 @@ export function CarCard({car}: CarCardProps) {
       <CardHeader
         avatar={
           <Avatar aria-label="car" className={classes.avatar}>
-            C
+            E
           </Avatar>
         }
         action={
@@ -56,7 +56,7 @@ export function CarCard({car}: CarCardProps) {
         className={classes.media}
         image={car.photoUrl}
         src={car.photoUrl}
-        title="Paella dish"
+        title="cars"
       />
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p">

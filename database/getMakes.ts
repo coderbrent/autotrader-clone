@@ -11,7 +11,8 @@ export async function getMakes() {
     FROM cars
     GROUP BY make
   `);
-
+// a little contrived, but had to do this to satisfy nexts need for
+// a POJO "plain old javascript object" when using getServerSideProps.
   let obj = JSON.parse(JSON.stringify(makes))
 
   let pojo = {
